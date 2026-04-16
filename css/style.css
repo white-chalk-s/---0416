@@ -776,10 +776,10 @@ tbody td { padding: 8px 10px; font-size: 12px; color: #444; }
 .dm-search-input { width: 420px; height: 36px; border: 1px solid #d9d9d9; border-right: none; border-radius: 4px 0 0 4px; padding: 0 12px; font-size: 14px; outline: none; color: #999; }
 .dm-search-btn { height: 36px; padding: 0 20px; background: #e8622a; color: #fff; border: none; border-radius: 0 4px 4px 0; font-size: 14px; cursor: pointer; }
 .dm-toggle-btn {
-    position: absolute;
-    top: 8px;
-    right: 24px;
-    z-index: 10;
+    position: fixed;
+    top: 120px;
+    right: 200px;
+    z-index: 100;
     padding: 4px 12px;
     background: #e8622a;
     color: #fff;
@@ -790,6 +790,7 @@ tbody td { padding: 8px 10px; font-size: 12px; color: #444; }
     height: 28px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .dm-toggle-btn:hover { background: #d44f1f; }
 .dm-panel.collapsed .dm-category-bar,
