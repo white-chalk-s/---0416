@@ -283,7 +283,10 @@ function showDeviceModel(catName){
     var listView = document.getElementById('deviceListView');
     var modelView = document.getElementById('deviceModelView');
     if(listView) listView.style.display = 'none';
-    if(modelView) modelView.style.display = 'block';
+    if(modelView) {
+        modelView.style.display = '';
+        modelView.classList.add('show');
+    }
 
     // 分类按钮交互
     document.querySelectorAll('.dm-cat-btn').forEach(function(btn){
