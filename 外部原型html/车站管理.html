@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车站资产管理</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: #f5f6f8; font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", Arial, sans-serif; font-size: 14px; color: #333; }
+
+.topbar { background: #fff; border-bottom: 1px solid #eee; padding: 0 20px; height: 48px; display: flex; align-items: center; gap: 8px; }
+.back-btn { color: #666; cursor: pointer; font-size: 16px; }
+.breadcrumb { color: #666; font-size: 14px; }
+.breadcrumb span { color: #333; }
+.breadcrumb .sep { margin: 0 6px; color: #999; }
+
+.main-tabs { background: #fff; border-bottom: 1px solid #eee; padding: 0 20px; display: flex; }
+.main-tab { height: 44px; padding: 0 16px; display: flex; align-items: center; font-size: 14px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.main-tab.active { color: #e8622a; border-bottom: 2px solid #e8622a; }
+.main-tab:hover:not(.active) { color: #e8622a; }
+
+.main { display: flex; height: calc(100vh - 92px); min-height: 0; }
+
+/* 左侧树*/
+.sidebar { width: 220px; background: #fff; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; position: relative; }
+.sidebar-search { padding: 10px 10px 8px; position: relative; }
+.sidebar-search input { width: 100%; height: 30px; border: 1px solid #ddd; border-radius: 4px; padding: 0 28px 0 10px; font-size: 13px; outline: none; color: #333; }
+.sidebar-search input::placeholder { color: #bbb; }
+.sidebar-search-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: #bbb; font-size: 13px; }
+
+.tree { flex: 1; overflow-y: auto; padding: 4px 0; }
+.tree-item { display: flex; align-items: center; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin: 1px 4px; position: relative; }
+.tree-item:hover { background: #fff5f0; }
+.tree-item.active { background: #fff5f0; }
+.tree-arrow { color: #999; font-size: 11px; margin-right: 4px; width: 12px; flex-shrink: 0; }
+.tree-icon { margin-right: 6px; font-size: 14px; flex-shrink: 0; }
+.tree-label { flex: 1; font-size: 13px; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tree-more-btn { color: #bbb; font-size: 16px; font-weight: bold; opacity: 0; cursor: pointer; padding: 0 2px; flex-shrink: 0; line-height: 1; letter-spacing: 1px; }
+.tree-item:hover .tree-more-btn { opacity: 1; }
+.tree-children { padding-left: 0; }
+.tree-child-item { display: flex; align-items: center; padding: 5px 10px 5px 26px; cursor: pointer; border-radius: 4px; margin: 1px 4px; position: relative; }
+.tree-child-item:hover { background: #fff5f0; }
+.tree-child-item .tree-more-btn { opacity: 0; }
+.tree-child-item:hover .tree-more-btn { opacity: 1; }
+
+/* 右键/more下拉菜单 */
+.context-menu { position: fixed; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 1000; min-width: 120px; padding: 4px 0; display: none; }
+.context-menu.show { display: block; }
+.context-menu-item { padding: 8px 16px; font-size: 13px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.context-menu-item:hover { background: #fff5f0; color: #e8622a; }
+.context-menu-item.danger { color: #e8622a; }
+.context-menu-item.danger:hover { background: #fff0ee; }
+
+/* 遮罩 */
+.mask { position: fixed; inset: 0; z-index: 900; display: none; }
+.mask.show { display: block; }
+
+/* 弹窗 */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 2000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); min-width: 380px; overflow: hidden; }
+.modal-header { padding: 18px 20px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f0f0f0; }
+.modal-title { font-size: 15px; font-weight: 600; color: #222; }
+.modal-close { background: none; border: none; font-size: 18px; color: #aaa; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: #333; }
+.modal-body { padding: 20px; }
+.modal-body label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
+.modal-body input { width: 100%; height: 34px; border: 1px solid #ddd; border-radius: 4px; padding: 0 10px; font-size: 13px; outline: none; color: #333; }
+.modal-body input:focus { border-color: #e8622a; }
+.modal-footer { padding: 12px 20px 18px; display: flex; justify-content: flex-end; gap: 10px; }
+.btn-cancel { height: 32px; padding: 0 18px; background: #fff; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; color: #555; cursor: pointer; }
+.btn-cancel:hover { border-color: #e8622a; color: #e8622a; }
+.btn-confirm { height: 32px; padding: 0 18px; background: #e8622a; border: none; border-radius: 4px; font-size: 13px; color: #fff; cursor: pointer; }
+.btn-confirm:hover { background: #d4561f; }
+.btn-confirm.danger-confirm { background: #e8622a; }
+
+/* 删除弹窗特殊 */
+.delete-tip { font-size: 14px; color: #444; line-height: 1.7; }
+.delete-tip strong { color: #e8622a; }
+
+/* 右侧内容 */
+.content { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.action-bar { background: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; }
+.action-left { display: flex; gap: 8px; }
+.btn-upload { height: 34px; padding: 0 16px; background: #e8622a; color: #fff; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-upload:hover { background: #d4561f; }
+.btn-normal { height: 34px; padding: 0 14px; background: #fff; color: #555; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; cursor: pointer; }
+.btn-normal:hover { border-color: #e8622a; color: #e8622a; }
+.search-right { position: relative; }
+.search-right input { width: 200px; height: 34px; border: 1px solid #ddd; border-radius: 4px; padding: 0 30px 0 12px; font-size: 13px; outline: none; }
+.search-right input::placeholder { color: #bbb; }
+.search-right-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #bbb; }
+
+.table-wrap { flex: 1; overflow-y: auto; background: #fff; margin: 12px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: #fdf0eb; }
+thead th { padding: 12px 16px; text-align: left; font-weight: 500; color: #555; font-size: 13px; border-bottom: 1px solid #f0e0d8; }
+thead th:first-child { width: 48px; text-align: center; }
+tbody tr { border-bottom: 1px solid #f5f5f5; }
+tbody tr:hover { background: #fffaf8; }
+tbody td { padding: 14px 16px; font-size: 13px; color: #444; vertical-align: middle; }
+tbody td:first-child { text-align: center; width: 48px; }
+.td-action { display: flex; gap: 10px; }
+.act-link { color: #e8622a; cursor: pointer; font-size: 13px; }
+.act-link:hover { text-decoration: underline; }
+input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; accent-color: #e8622a; }
+
+.footer { background: #fff; border-top: 1px solid #eee; padding: 10px 20px; display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-shrink: 0; overflow: hidden; }
+.page-btn { width: 30px; height: 30px; border: 1px solid #ddd; border-radius: 4px; background: #fff; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
+.page-btn.active { background: #e8622a; color: #fff; border-color: #e8622a; }
+.page-btn:hover:not(.active) { border-color: #e8622a; color: #e8622a; }
+.page-text { font-size: 13px; color: #666; }
+.page-goto { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #666; }
+.page-goto input { width: 40px; height: 30px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 13px; outline: none; }
+
+/* 内容面板切换 */
+.content-panel { display: none; flex-direction: column; flex: 1; min-height: 0; }
+.content-panel.active { display: flex; }
+
+/* 设备管理筛选栏 */
+.equipment-filter-bar { background: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; }
+.filter-left { display: flex; align-items: center; gap: 12px; }
+.filter-label { font-size: 13px; color: #555; }
+.filter-select { height: 34px; padding: 0 28px 0 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; color: #333; outline: none; cursor: pointer; appearance: none; background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23999" d="M2 4l4 4 4-4"/></svg>') no-repeat right 10px center; }
+.filter-select:focus { border-color: #e8622a; }
+
+/* 设备状态标签 */
+.status-normal { display: inline-block; padding: 2px 8px; background: #e8f5e9; color: #2e7d32; border-radius: 3px; font-size: 12px; }
+.status-warning { display: inline-block; padding: 2px 8px; background: #fff3e0; color: #f57c00; border-radius: 3px; font-size: 12px; }
+.status-error { display: inline-block; padding: 2px 8px; background: #ffebee; color: #c62828; border-radius: 3px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- 顶部 -->
+<div class="topbar">
+  <span class="back-btn">←</span>
+  <div class="breadcrumb">车站资产管理 <span class="sep">/</span><span>重庆十五号线项目</span></div>
+</div>
+<div class="main-tabs">
+  <div class="main-tab" id="mainTab-equipment" onclick="switchMainTab('equipment')">设备管理</div>
+  <div class="main-tab active" id="mainTab-station" onclick="switchMainTab('station')">车站管理</div>
+  <div class="main-tab" id="mainTab-material" onclick="switchMainTab('material')">材质管理</div>
+  <div class="main-tab" id="mainTab-scene" onclick="switchMainTab('scene')">场景管理</div>
+</div>
+
+<div class="main">
+  <!-- 左侧树 -->
+  <div class="sidebar">
+    <div class="sidebar-search">
+      <input type="text" placeholder="请输入文件名">
+      <span class="sidebar-search-icon">🔍</span>
+    </div>
+    <div class="tree">
+      <div class="tree-item active">
+        <span class="tree-arrow">▼</span>
+        <span class="tree-icon">📁</span>
+        <span class="tree-label">全部</span>
+        <span class="tree-more-btn" onclick="showMenu(event,'全部')">···</span>
+      </div>
+      <div class="tree-children">
+        <div class="tree-child-item">
+          <span class="tree-icon">📁</span>
+          <span class="tree-label">两江影视城站</span>
+          <span class="tree-more-btn" onclick="showMenu(event,'两江影视城站')">···</span>
+        </div>
+        <div class="tree-child-item">
+          <span class="tree-icon">📁</span>
+          <span class="tree-label">出站检票机（R2A）-A</span>
+          <span class="tree-more-btn" onclick="showMenu(event,'出站检票机（R2A）-A')">···</span>
+        </div>
+        <div class="tree-child-item">
+          <span class="tree-icon">📁</span>
+          <span class="tree-label">宝圣湖站</span>
+          <span class="tree-more-btn" onclick="showMenu(event,'宝圣湖站')">···</span>
+        </div>
+        <div class="tree-child-item">
+          <span class="tree-icon">📁</span>
+          <span class="tree-label">两江大道站</span>
+          <span class="tree-more-btn" onclick="showMenu(event,'两江大道站')">···</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧 -->
+  <div class="content">
+    <!-- 设备管理内容 -->
+    <div class="content-panel" id="equipmentPanel">
+      <div class="equipment-filter-bar">
+        <div class="filter-left">
+          <span class="filter-label">设备类型：</span>
+          <select class="filter-select">
+            <option>全部</option>
+            <option>闸机</option>
+            <option>售票机</option>
+            <option>摄像机</option>
+            <option>扶梯</option>
+          </select>
+          <span class="filter-label">所属站点：</span>
+          <select class="filter-select">
+            <option>全部</option>
+            <option>两江影视城站</option>
+            <option>宝圣湖站</option>
+            <option>两江大道站</option>
+          </select>
+        </div>
+        <div class="filter-right">
+          <button class="btn-normal">导出</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox"></th>
+              <th>设备编号</th>
+              <th>设备名称</th>
+              <th>设备类型</th>
+              <th>所属站点</th>
+              <th>安装位置</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><input type="checkbox"></td><td>AG-001</td><td>进站闸机-A1</td><td>闸机</td><td>两江影视城站</td><td>1号口进站</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>AG-002</td><td>进站闸机-A2</td><td>闸机</td><td>两江影视城站</td><td>1号口进站</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>TVM-001</td><td>自动售票机-01</td><td>售票机</td><td>两江影视城站</td><td>站厅层</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>TVM-002</td><td>自动售票机-02</td><td>售票机</td><td>两江影视城站</td><td>站厅层</td><td><span class="status-warning">维修中</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>CAM-001</td><td>半球摄像机-01</td><td>摄像机</td><td>两江影视城站</td><td>站台层</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>CAM-002</td><td>球机摄像机-01</td><td>摄像机</td><td>两江影视城站</td><td>站厅层</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>ESC-001</td><td>上行扶梯-01</td><td>扶梯</td><td>两江影视城站</td><td>1号口</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>ESC-002</td><td>下行扶梯-01</td><td>扶梯</td><td>两江影视城站</td><td>1号口</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>AG-003</td><td>出站闸机-B1</td><td>闸机</td><td>宝圣湖站</td><td>2号口出站</td><td><span class="status-normal">正常</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>AG-004</td><td>出站闸机-B2</td><td>闸机</td><td>宝圣湖站</td><td>2号口出站</td><td><span class="status-error">故障</span></td><td><div class="td-action"><span class="act-link">查看</span><span class="act-link">编辑</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">›</button>
+        <div class="page-goto">前往<input type="text" value="1">页</div>
+        <span class="page-text">共28条</span>
+      </div>
+    </div>
+
+    <!-- 车站管理内容 -->
+    <div class="content-panel active" id="stationPanel">
+      <div class="action-bar">
+        <div class="action-left">
+          <button class="btn-upload">⬆ 上传文件</button>
+          <button class="btn-normal">上传记录</button>
+          <button class="btn-normal">批量下载</button>
+          <button class="btn-normal">批量删除</button>
+        </div>
+        <div class="search-right">
+          <input type="text" placeholder="请输入名称搜索">
+          <span class="search-right-icon">🔍</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox"></th>
+              <th>名称</th>
+              <th>大小</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><input type="checkbox"></td><td>1号出入口.zip</td><td>37.01KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>3号出入口.zip</td><td>40.10KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>4号出入口.zip</td><td>59.84KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站AFC设备布置模型.zip</td><td>762.83KB</td><td>2026-02-24 14:48:09</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站车站通信设备模型-摄像机.zip</td><td>642.83KB</td><td>2026-02-24 14:48:09</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站车站通信设备模型-去除摄像机.zip</td><td>5.30MB</td><td>2026-02-24 14:48:10</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站出入口控制系统.zip</td><td>282.10KB</td><td>2026-02-24 14:48:10</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站电扶梯模型.zip</td><td>7.36MB</td><td>2026-02-24 14:48:11</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站动力照明.zip</td><td>3.25MB</td><td>2026-02-24 14:48:11</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站公共区装修_站台层.zip</td><td>26.38MB</td><td>2026-02-24 14:48:14</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站内部结构.zip</td><td>318.10KB</td><td>2026-02-24 14:48:24</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站站台门-非李生体.zip</td><td>11.38MB</td><td>2026-02-24 14:48:26</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+            <tr><td><input type="checkbox"></td><td>两江影视城站通风空调.zip</td><td>35.55MB</td><td>2026-02-24 14:48:27</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <button class="page-btn">›</button>
+        <div class="page-goto">前往<input type="text" value="1">页</div>
+        <span class="page-text">共70条</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--遮罩（关闭菜单用） -->
+<div class="mask" id="mask" onclick="closeMenu()"></div>
+
+<!-- 右键下拉菜单 -->
+<div class="context-menu" id="contextMenu">
+  <div class="context-menu-item" onclick="openRename()">
+    <span>✏️</span> 重命名
+  </div>
+  <div class="context-menu-item danger" onclick="openDelete()">
+    <span>🗑</span> 删除
+  </div>
+</div>
+
+<!-- 重命名弹窗 -->
+<div class="modal-overlay" id="renameModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">重命名</span>
+      <button class="modal-close" onclick="closeModal('renameModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <label>名称</label>
+      <input type="text" id="renameInput" placeholder="请输入新名称">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('renameModal')">取消</button>
+      <button class="btn-confirm" onclick="closeModal('renameModal')">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 删除弹窗 -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">删除确认</span>
+      <button class="modal-close" onclick="closeModal('deleteModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="delete-tip">确定要删除 <strong id="deleteTarget"></strong> 吗？<br>删除后数据将无法恢复，请谨慎操作。</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('deleteModal')">取消</button>
+      <button class="btn-confirm danger-confirm" onclick="closeModal('deleteModal')">确定删除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentTarget = '';
+
+// 切换主Tab
+function switchMainTab(tab) {
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+
+  if (tab === 'equipment') {
+    document.getElementById('mainTab-equipment').classList.add('active');
+    document.getElementById('equipmentPanel').classList.add('active');
+  } else if (tab === 'station') {
+    document.getElementById('mainTab-station').classList.add('active');
+    document.getElementById('stationPanel').classList.add('active');
+  } else if (tab === 'material') {
+    document.getElementById('mainTab-material').classList.add('active');
+  } else if (tab === 'scene') {
+    document.getElementById('mainTab-scene').classList.add('active');
+  }
+}
+
+function showMenu(e, name) {
+  e.stopPropagation();
+  currentTarget = name;
+  const menu = document.getElementById('contextMenu');
+  const mask = document.getElementById('mask');
+  const rect = e.target.getBoundingClientRect();
+  menu.style.left = rect.right + 'px';
+  menu.style.top = rect.bottom + 4 + 'px';
+  menu.classList.add('show');
+  mask.classList.add('show');
+}
+
+function closeMenu() {
+  document.getElementById('contextMenu').classList.remove('show');
+  document.getElementById('mask').classList.remove('show');
+}
+
+function openRename() {
+  closeMenu();
+  document.getElementById('renameInput').value = currentTarget;
+  document.getElementById('renameModal').classList.add('show');
+}
+
+function openDelete() {
+  closeMenu();
+  document.getElementById('deleteTarget').textContent = currentTarget;
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// 点击弹窗外关闭
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeMenu();
+    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+  }
+});
+</script>
+</body>
+</html>

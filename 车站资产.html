@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车站资产管理</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-logo">
+        <span style="color:var(--primary-color);font-size:20px;font-weight:900;">PCI</span>
+        <span style="color:#fff;font-weight:bold;">佳都</span>
+        <span style="color:#ccc;font-size:15px;font-weight:normal;letter-spacing:2px;">轨交资产库</span>
+    </div>
+    <div class="header-user">
+        <span class="user-avatar"></span>
+        <span>admin</span>
+        <span style="color:#aaa;font-size:11px;">▼</span>
+    </div>
+</header>
+
+<div class="layout-body">
+    <aside class="sidebar">
+        <div class="menu-group">
+            <div class="menu-parent" id="parent-device" onclick="toggleMenu('device'); return false;">
+                <div class="menu-parent-left">
+                    <div class="menu-icon-diamond">
+                        <svg viewBox="0 0 18 18" fill="none">
+                            <rect x="1" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.9"/>
+                            <rect x="10" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/>
+                            <rect x="1" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/>
+                            <rect x="10" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/>
+                        </svg>
+                    </div>
+                    设备模型
+                </div>
+                <span class="menu-arrow" id="arrow-device">∧</span>
+            </div>
+            <div class="submenu" id="submenu-device">
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>通风空调与采暖系统</div>
+                <div class="submenu-item" onclick="showDeviceModel('通信系统'); return false;"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>通信系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>给水与排水设备</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>自动售检票系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>乘客信息系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>供电</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>主变电系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>站台门系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>环境与设备监控系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>电梯客运系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>综合监控系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>安防系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>门禁系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>灭火系统</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>防雷与接地</div>
+            </div>
+        </div>
+        <div class="menu-single"><div class="menu-icon-diamond"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.9"/><rect x="10" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="1" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="10" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/></svg></div>材质管理</div>
+        <div class="menu-single active"><div class="menu-icon-diamond"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.9"/><rect x="10" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="1" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="10" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/></svg></div>车站资产</div>
+        <div class="menu-group">
+            <div class="menu-parent" id="parent-system" onclick="toggleMenu('system'); return false;">
+                <div class="menu-parent-left">
+                    <div class="menu-icon-diamond"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.9"/><rect x="10" y="1" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="1" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/><rect x="10" y="10" width="7" height="7" rx="1" fill="#e05a1e" opacity="0.5"/></svg></div>
+                    系统管理
+                </div>
+                <span class="menu-arrow" id="arrow-system">∧</span>
+            </div>
+            <div class="submenu" id="submenu-system">
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>用户管理</div>
+                <div class="submenu-item"><div class="sub-icon"><svg viewBox="0 0 14 12" fill="none"><rect x="0" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.8"/><rect x="8" y="0" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="0" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/><rect x="8" y="7" width="6" height="5" rx="1" fill="#e05a1e" opacity="0.4"/></svg></div>线路配置</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="project-list-page" id="projectListPage">
+            <div class="page-header">
+                <div class="page-title">车站资产管理</div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="请输入关键字检索">
+                    <button class="search-btn" onclick="return false;">搜索</button>
+                </div>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-primary">+ 新增项目</button>
+                <button class="btn btn-primary">↑ 导入项目</button>
+                <button class="btn btn-primary">↓ 导出项目</button>
+                <button class="btn btn-default">导出任务</button>
+                <span class="item-count">共 2 个项目</span>
+            </div>
+            <div class="card-grid">
+                <div class="card" onclick="openProjectDetail('重庆十五号线项目', '重庆十五号线'); return false;">
+                    <div class="card-actions">
+                        <div class="card-action-btn" title="编辑"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 33L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                        <div class="card-action-btn" title="删除"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
+                    </div>
+                    <div class="card-img-placeholder1"></div>
+                    <div class="card-info">
+                        <div class="card-title"><input type="checkbox" class="card-checkbox">重庆十五号线项目</div>
+                        <div class="card-date">更新日期：2026-04-08</div>
+                    </div>
+                </div>
+                <div class="card" onclick="openProjectDetail('重庆十五号线AFC智能运维', '重庆十五号线'); return false;">
+                    <div class="card-actions">
+                        <div class="card-action-btn" title="编辑"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 33L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                        <div class="card-action-btn" title="删除"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
+                    </div>
+                    <div class="card-img-placeholder2"></div>
+                    <div class="card-info">
+                        <div class="card-title"><input type="checkbox" class="card-checkbox">重庆十五号线AFC智能运维</div>
+                        <div class="card-date">更新日期：2026-03-19</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-detail" id="projectDetail">
+            <div class="breadcrumb">
+                <div class="breadcrumb-back" onclick="closeProjectDetail(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+                <span class="breadcrumb-link" onclick="closeProjectDetail(); return false;">车站资产管理</span>
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-current" id="detailProjectName">重庆十五号线项目</span>
+            </div>
+            <div class="page-tabs">
+                <div class="ptab active" data-tab="device" onclick="switchTab('device'); return false;">设备管理</div>
+                <div class="ptab" data-tab="station" onclick="switchTab('station'); return false;">车站管理</div>
+                <div class="ptab" data-tab="material" onclick="switchTab('material'); return false;">材质管理</div>
+                <div class="ptab" data-tab="scene" onclick="switchTab('scene'); return false;">场景管理</div>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-device">
+                    <div id="deviceListView">
+                    <div class="action-bar">
+                        <button class="abtn abtn-primary" onclick="showModal('modal-import')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>从平台导入设备模型</button>
+                        <button class="abtn abtn-primary"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>从文件导入</button>
+                        <button class="abtn abtn-default" onclick="doExportFile()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出至文件</button>
+                        <button class="abtn abtn-default" onclick="showModal('modal-export')">导出任务</button>
+                    </div>
+                    <div class="main-split">
+                        <div class="tree-panel">
+                            <div class="tree-search-bar">
+                                <input class="tree-search-input" type="text" placeholder="请输入文件名">
+                                <div class="tree-search-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                            </div>
+                            <div class="tree-body" id="tree-root"></div>
+                        </div>
+                        <div class="table-panel">
+                            <div class="table-toolbar">
+                                <button class="bbtn" onclick="showToast('download')">批量下载</button>
+                                <button class="bbtn" onclick="showModal('modal-confirm')">批量删除</button>
+                                <div class="tbl-search-wrap">
+                                    <input class="tbl-search-input" type="text" placeholder="请输入名称搜索">
+                                    <div class="tbl-search-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                                </div>
+                            </div>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead>
+                                        <tr><th style="width:40px;"><input type="checkbox" id="cb-all" style="accent-color:#e65c3b;width:14px;height:14px;" onchange="toggleAllCb(this)"></th><th>名称</th><th>设备型号</th><th>设备厂家</th><th>设备分类</th><th>更新时间</th><th>操作</th></tr>
+                                    </thead>
+                                    <tbody id="table-body"></tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-bar">
+                                <button class="pg-btn disabled">‹</button>
+                                <button class="pg-btn active">1</button>
+                                <button class="pg-btn">2</button>
+                                <button class="pg-btn">3</button>
+                                <button class="pg-btn">›</button>
+                                <span class="pg-text" style="margin-left:10px;">前往</span>
+                                <input class="pg-input" type="text" value="1">
+                                <span class="pg-text">页</span>
+                                <span class="pg-text" style="margin-left:12px;">共42条</span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- 设备模型列表页 -->
+
+                    <!-- 设备模型卡片页 -->
+                    <div id="deviceModelView" style="display:none;">
+                        <div class="dm-top-bar">
+                            <h1 class="dm-title">设备模型</h1>
+                            <div class="dm-search">
+                                <input class="dm-search-input" type="text" placeholder="请输入关键字检索">
+                                <button class="dm-search-btn">搜索</button>
+                            </div>
+                        </div>
+                        <div class="dm-category-bar">
+                            <span class="dm-cat-label">二级：</span>
+                            <button class="dm-cat-btn active">全部</button>
+                            <button class="dm-cat-btn">自动扶梯</button>
+                            <button class="dm-cat-btn">有机房电梯</button>
+                            <button class="dm-cat-btn">无机房电梯</button>
+                            <button class="dm-cat-btn text-orange">楼梯升降机</button>
+                            <button class="dm-cat-btn">其他</button>
+                        </div>
+                        <div class="dm-toolbar">
+                            <div class="dm-toolbar-left">
+                                <div class="dm-select-box"><span>文件格式</span></div>
+                                <div class="dm-select-box"><span>下载权限</span></div>
+                                <div class="dm-select-box"><span>资产来源</span></div>
+                                <button class="dm-reset-btn">重置</button>
+                            </div>
+                            <div class="dm-toolbar-right">
+                                <button class="dm-action-btn add">＋ 添加</button>
+                                <button class="dm-action-btn">↓ 下载</button>
+                                <button class="dm-action-btn">🗑 删除</button>
+                                <div class="dm-per-row">8个/行</div>
+                            </div>
+                        </div>
+                        <div class="dm-content">
+                            <div class="dm-grid">
+                                <div class="dm-card">
+                                    <div class="dm-card-checkbox" onclick="this.classList.toggle('checked')"></div>
+                                    <div class="dm-card-img img-elevator">
+                                        <svg viewBox="0 0 80 160" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="25" y="10" width="30" height="100" rx="2" fill="#888"/>
+                                            <rect x="28" y="15" width="24" height="70" rx="1" fill="#aaa"/>
+                                            <rect x="30" y="20" width="8" height="30" rx="1" fill="#777"/>
+                                            <rect x="42" y="20" width="8" height="30" rx="1" fill="#777"/>
+                                            <rect x="20" y="110" width="10" height="40" rx="1" fill="#999"/>
+                                            <rect x="50" y="110" width="10" height="40" rx="1" fill="#999"/>
+                                            <rect x="15" y="148" width="50" height="6" rx="2" fill="#888"/>
+                                        </svg>
+                                    </div>
+                                    <div class="dm-card-label">楼梯升降机</div>
+                                </div>
+                                <div class="dm-card">
+                                    <div class="dm-card-checkbox" onclick="this.classList.toggle('checked')"></div>
+                                    <div class="dm-card-img img-escalator1">
+                                        <svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="10" y="80" width="140" height="12" rx="2" fill="#555" transform="rotate(-30 80 86)"/>
+                                            <rect x="10" y="70" width="140" height="8" rx="1" fill="#777" transform="rotate(-30 80 74)"/>
+                                            <line x1="15" y1="100" x2="145" y2="30" stroke="#444" stroke-width="3"/>
+                                            <line x1="20" y1="105" x2="150" y2="35" stroke="#444" stroke-width="3"/>
+                                            <rect x="20" y="88" width="14" height="6" fill="#666" transform="rotate(-30 27 91)"/>
+                                            <rect x="38" y="76" width="14" height="6" fill="#666" transform="rotate(-30 45 79)"/>
+                                            <rect x="56" y="64" width="14" height="6" fill="#666" transform="rotate(-30 63 67)"/>
+                                            <rect x="74" y="52" width="14" height="6" fill="#666" transform="rotate(-30 81 55)"/>
+                                            <rect x="92" y="40" width="14" height="6" fill="#666" transform="rotate(-30 99 43)"/>
+                                        </svg>
+                                    </div>
+                                    <div class="dm-card-label">站外自动扶梯</div>
+                                </div>
+                                <div class="dm-card">
+                                    <div class="dm-card-checkbox" onclick="this.classList.toggle('checked')"></div>
+                                    <div class="dm-card-img img-escalator2">
+                                        <svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="8" y="78" width="144" height="14" rx="2" fill="#444" transform="rotate(-28 80 85)"/>
+                                            <rect x="8" y="68" width="144" height="8" rx="1" fill="#666" transform="rotate(-28 80 72)"/>
+                                            <line x1="12" y1="98" x2="148" y2="28" stroke="#333" stroke-width="3"/>
+                                            <line x1="18" y1="103" x2="154" y2="33" stroke="#333" stroke-width="3"/>
+                                            <rect x="18" y="86" width="15" height="7" fill="#555" transform="rotate(-28 25 89)"/>
+                                            <rect x="36" y="73" width="15" height="7" fill="#555" transform="rotate(-28 43 76)"/>
+                                            <rect x="54" y="60" width="15" height="7" fill="#555" transform="rotate(-28 61 63)"/>
+                                            <rect x="72" y="47" width="15" height="7" fill="#555" transform="rotate(-28 79 50)"/>
+                                            <rect x="90" y="34" width="15" height="7" fill="#555" transform="rotate(-28 97 37)"/>
+                                            <rect x="108" y="21" width="15" height="7" fill="#555" transform="rotate(-28 115 24)"/>
+                                        </svg>
+                                    </div>
+                                    <div class="dm-card-label">站内自动扶梯</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dm-footer">
+                            <span class="dm-total">共3条记录</span>
+                            <div class="dm-pagination">
+                                <button class="dm-page-btn">‹</button>
+                                <button class="dm-page-btn active">1</button>
+                                <button class="dm-page-btn">›</button>
+                                <div class="dm-page-size">100条/页</div>
+                                <div class="dm-goto">
+                                    前往 <input type="text" value="1"> 页
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab-station">
+                    <!-- 车站管理 - 整合外部原型功能 -->
+                    <div class="station-manager">
+                        <div class="action-bar">
+                            <button class="abtn abtn-primary">+ 新增车站</button>
+                            <button class="abtn abtn-default">导入车站</button>
+                            <button class="abtn abtn-default">导出车站</button>
+                        </div>
+                        <div class="main-split">
+                            <div class="tree-panel">
+                                <div class="tree-search-bar">
+                                    <input class="tree-search-input" type="text" placeholder="请输入车站名搜索">
+                                    <div class="tree-search-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                                </div>
+                                <div class="tree-body" id="station-tree-root">
+                                    <div class="tree-item active">
+                                        <span class="tree-arrow">▼</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-label">全部</span>
+                                        <span class="tree-more-btn" onclick="showStationMenu(event,'全部')">···</span>
+                                    </div>
+                                    <div class="tree-children">
+                                        <div class="tree-child-item">
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-label">两江影视城站</span>
+                                            <span class="tree-more-btn" onclick="showStationMenu(event,'两江影视城站')">···</span>
+                                        </div>
+                                        <div class="tree-child-item">
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-label">出站检票机（R2A）-A</span>
+                                            <span class="tree-more-btn" onclick="showStationMenu(event,'出站检票机（R2A）-A')">···</span>
+                                        </div>
+                                        <div class="tree-child-item">
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-label">宝圣湖站</span>
+                                            <span class="tree-more-btn" onclick="showStationMenu(event,'宝圣湖站')">···</span>
+                                        </div>
+                                        <div class="tree-child-item">
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-label">两江大道站</span>
+                                            <span class="tree-more-btn" onclick="showStationMenu(event,'两江大道站')">···</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-panel">
+                                <div class="table-toolbar">
+                                    <button class="bbtn">批量上传</button>
+                                    <button class="bbtn">上传记录</button>
+                                    <button class="bbtn">批量下载</button>
+                                    <button class="bbtn" onclick="showModal('modal-confirm')">批量删除</button>
+                                    <button class="bbtn" onclick="window.open('../车站编辑原型/index.html','_blank')">车站编辑</button>
+                                    <div class="tbl-search-wrap">
+                                        <input class="tbl-search-input" type="text" placeholder="请输入名称搜索">
+                                        <div class="tbl-search-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                                    </div>
+                                </div>
+                                <div class="table-wrap">
+                                    <table>
+                                        <thead>
+                                            <tr><th style="width:40px;"><input type="checkbox" style="accent-color:#e65c3b;width:14px;height:14px;"></th><th>名称</th><th>大小</th><th>创建时间</th><th>操作</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td><input type="checkbox"></td><td>1号出入口.zip</td><td>37.01KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>3号出入口.zip</td><td>40.10KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>4号出入口.zip</td><td>59.84KB</td><td>2026-02-24 14:48:08</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站AFC设备布置模型.zip</td><td>762.83KB</td><td>2026-02-24 14:48:09</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站车站通信设备模型-摄像机.zip</td><td>642.83KB</td><td>2026-02-24 14:48:09</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站车站通信设备模型-去除摄像机.zip</td><td>5.30MB</td><td>2026-02-24 14:48:10</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站出入口控制系统.zip</td><td>282.10KB</td><td>2026-02-24 14:48:10</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站电扶梯模型.zip</td><td>7.36MB</td><td>2026-02-24 14:48:11</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站动力照明.zip</td><td>3.25MB</td><td>2026-02-24 14:48:11</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站公共区装修_站台层.zip</td><td>26.38MB</td><td>2026-02-24 14:48:14</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站内部结构.zip</td><td>318.10KB</td><td>2026-02-24 14:48:24</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站站台门-非李生体.zip</td><td>11.38MB</td><td>2026-02-24 14:48:26</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                            <tr><td><input type="checkbox"></td><td>两江影视城站通风空调.zip</td><td>35.55MB</td><td>2026-02-24 14:48:27</td><td><div class="td-action"><span class="act-link">下载</span><span class="act-link">预览</span><span class="act-link">删除</span></div></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-bar">
+                                    <button class="pg-btn disabled">‹</button>
+                                    <button class="pg-btn active">1</button>
+                                    <button class="pg-btn">2</button>
+                                    <button class="pg-btn">3</button>
+                                    <button class="pg-btn">4</button>
+                                    <button class="pg-btn">›</button>
+                                    <span class="pg-text" style="margin-left:10px;">前往</span>
+                                    <input class="pg-input" type="text" value="1">
+                                    <span class="pg-text">页</span>
+                                    <span class="pg-text" style="margin-left:12px;">共70条</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab-material">
+                    <div class="action-bar">
+                        <button class="abtn abtn-primary">+ 新增材质</button>
+                        <button class="abtn abtn-default">批量导入</button>
+                        <button class="abtn abtn-default">导出材质</button>
+                    </div>
+                    <div class="material-grid">
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div><div class="material-name">不锈钢材质</div></div>
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div><div class="material-name">铝合金</div></div>
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div><div class="material-name">玻璃材质</div></div>
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div><div class="material-name">石材</div></div>
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div><div class="material-name">木材</div></div>
+                        <div class="material-card"><div class="material-preview" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div><div class="material-name">塑料</div></div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab-scene">
+                    <div class="action-bar">
+                        <button class="abtn abtn-primary">+ 新增场景</button>
+                        <button class="abtn abtn-default">导入场景</button>
+                        <button class="abtn abtn-default">导出场景</button>
+                    </div>
+                    <div class="scene-list">
+                        <div class="scene-item"><div class="scene-thumb"></div><div class="scene-info"><div class="scene-name">重光站站厅层</div><div class="scene-desc">包含站厅层所有设备的三维场景展示</div></div></div>
+                        <div class="scene-item"><div class="scene-thumb" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div><div class="scene-info"><div class="scene-name">重光站站台层</div><div class="scene-desc">包含站台层所有设备的三维场景展示</div></div></div>
+                        <div class="scene-item"><div class="scene-thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div><div class="scene-info"><div class="scene-name">龙兴站整体</div><div class="scene-desc">包含车站整体三维场景展示</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- MODAL: 导入 -->
+<div class="modal-overlay" id="modal-import">
+    <div class="modal modal-import">
+        <div class="modal-header"><span class="modal-title">从资产库导入</span><span class="modal-close" onclick="hideModal('modal-import')">×</span></div>
+        <div class="modal-body-import">
+            <div class="import-left">
+                <div class="import-left-search"><input type="text" placeholder="请输入文件名"><div class="s-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+                <div class="import-tree" id="import-tree-root"></div>
+            </div>
+            <div class="import-mid">
+                <div class="import-filters">
+                    <div class="filter-tag">重庆15号线<span class="tx" onclick="this.parentElement.remove()">×</span></div>
+                    <div class="filter-tag">导入FBX<span class="tx" onclick="this.parentElement.remove()">×</span></div>
+                    <div class="filter-tag">+1<span class="tx" onclick="this.parentElement.remove()">×</span></div>
+                    <div class="filter-search"><input type="text" placeholder="请输入模型名称"><div class="s-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+                </div>
+                <div class="import-tbl-wrap">
+                    <table><thead><tr><th style="width:36px;"><input type="checkbox" style="accent-color:#e65c3b;width:14px;height:14px;"></th><th>名称</th><th>设备型号</th><th>设备厂家</th></tr></thead><tbody id="import-table-body"></tbody></table>
+                </div>
+                <div class="import-pg">
+                    <button class="pg-btn disabled">‹</button>
+                    <button class="pg-btn active">1</button>
+                    <button class="pg-btn">2</button>
+                    <button class="pg-btn">3</button>
+                    <button class="pg-btn">›</button>
+                    <span class="pg-text" style="margin-left:8px;">前往</span>
+                    <input class="pg-input" type="text" value="1">
+                    <span class="pg-text">页</span>
+                    <span class="pg-text" style="margin-left:8px;">共48条</span>
+                </div>
+            </div>
+            <div class="import-right">
+                <div class="import-right-title">已选择 0条记录</div>
+                <div class="import-right-empty">暂无选择</div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="fbtn" onclick="hideModal('modal-import')">取消</button><button class="fbtn fbtn-primary">确定</button></div>
+    </div>
+</div>
+
+<!-- MODAL: 详情 -->
+<div class="modal-overlay" id="modal-detail">
+    <div class="modal modal-detail">
+        <div class="modal-header"><span class="modal-title" id="detail-title">楼梯升降机.glb</span><span class="modal-close" onclick="hideModal('modal-detail')">×</span></div>
+        <div class="detail-body">
+            <div class="detail-preview">
+                <svg viewBox="0 0 100 120" width="120" height="140" fill="none">
+                    <rect x="20" y="10" width="60" height="100" rx="4" fill="#e0e0e0" stroke="#bbb" stroke-width="2"/>
+                    <rect x="30" y="5" width="40" height="12" rx="2" fill="#ccc"/>
+                    <rect x="35" y="28" width="22" height="30" rx="2" fill="#b0b0b0" opacity="0.7"/>
+                    <line x1="50" y1="58" x2="50" y2="85" stroke="#aaa" stroke-width="2"/>
+                    <rect x="22" y="84" width="56" height="12" rx="2" fill="#ccc"/>
+                    <line x1="20" y1="10" x2="20" y2="110" stroke="#999" stroke-width="1.5"/>
+                    <line x1="80" y1="10" x2="80" y2="110" stroke="#999" stroke-width="1.5"/>
+                </svg>
+            </div>
+            <div class="detail-info">
+                <div class="detail-actions">
+                    <button class="dact-btn dact-primary" onclick="hideModal('modal-detail');showToast('download')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>立即下载</button>
+                    <button class="dact-btn dact-outline"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>查看模型</button>
+                </div>
+                <div class="d-row"><span class="d-label">关键字：</span><span>--</span></div>
+                <div class="d-row"><span class="d-label">文件格式：</span><span class="d-tag-glb">glb</span></div>
+                <div class="d-divider"></div>
+                <div class="d-grid">
+                    <div><div class="d-grid-label">文件大小</div><div class="d-grid-val">1.21MB</div></div>
+                    <div><div class="d-grid-label">文件格式</div><div class="d-grid-val">glb</div></div>
+                    <div><div class="d-grid-label">创建时间</div><div class="d-grid-val" style="font-size:12px;">2026-03-02 10:00</div></div>
+                    <div><div class="d-grid-label">修改时间</div><div class="d-grid-val" style="font-size:12px;">2026-03-02 10:00</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: 导出任务 -->
+<div class="modal-overlay" id="modal-export">
+    <div class="modal modal-export">
+        <div class="modal-header"><span class="modal-title">导出任务</span><span class="modal-close" onclick="hideModal('modal-export')">×</span></div>
+        <div class="export-body">
+            <table class="export-tbl"><thead><tr><th>名称</th><th style="width:72px;">状态</th><th style="width:90px;">操作</th></tr></thead><tbody id="export-tbody"></tbody></table>
+        </div>
+        <div class="modal-footer"><button class="fbtn" onclick="hideModal('modal-export')">关闭</button></div>
+    </div>
+</div>
+
+<!-- MODAL: 删除确认 -->
+<div class="modal-overlay" id="modal-confirm">
+    <div class="modal modal-confirm">
+        <div class="modal-header"><span class="modal-title">删除确认</span><span class="modal-close" onclick="hideModal('modal-confirm')">×</span></div>
+        <div class="confirm-body">
+            <div class="confirm-warn-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e05a1e" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="confirm-text">确定要删除文件吗？</div>
+        </div>
+        <div class="modal-footer"><button class="fbtn" onclick="hideModal('modal-confirm')">取消</button><button class="fbtn fbtn-primary" onclick="hideModal('modal-confirm');showToast('delete')">确定</button></div>
+    </div>
+</div>
+
+<!-- MODAL: 导出至文件 -->
+<div class="modal-overlay" id="modal-exportfile">
+    <div class="modal modal-exportfile">
+        <div class="modal-header"><span class="modal-title">导出至文件</span><span class="modal-close" onclick="hideModal('modal-exportfile')">×</span></div>
+        <div class="exportfile-body"><p>导出任务已创建，请到「导出任务」中查看进度并下载文件。</p></div>
+        <div class="modal-footer"><button class="fbtn" onclick="hideModal('modal-exportfile')">关闭</button><button class="fbtn fbtn-primary" onclick="hideModal('modal-exportfile');showModal('modal-export')">查看导出任务</button></div>
+    </div>
+</div>
+
+<!-- 车站管理右键菜单 -->
+<div class="station-mask" id="stationMask" onclick="closeStationMenu()" style="position:fixed;inset:0;z-index:900;display:none;"></div>
+<div class="station-context-menu" id="stationContextMenu" style="position:fixed;background:#fff;border:1px solid #e0e0e0;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:1000;min-width:120px;padding:4px 0;display:none;">
+    <div class="context-menu-item" onclick="openStationRename()">
+        <span>✏️</span> 重命名
+    </div>
+    <div class="context-menu-item danger" onclick="openStationDelete()" style="color:#e8622a;">
+        <span>🗑</span> 删除
+    </div>
+</div>
+
+<!-- 车站重命名弹窗 -->
+<div class="modal-overlay" id="stationRenameModal">
+    <div class="modal" style="width:380px;">
+        <div class="modal-header"><span class="modal-title">重命名</span><span class="modal-close" onclick="hideModal('stationRenameModal')">×</span></div>
+        <div class="modal-body" style="padding:20px;">
+            <label style="font-size:13px;color:#666;display:block;margin-bottom:6px;">名称</label>
+            <input type="text" id="stationRenameInput" placeholder="请输入新名称" style="width:100%;height:34px;border:1px solid #ddd;border-radius:4px;padding:0 10px;font-size:13px;outline:none;color:#333;">
+        </div>
+        <div class="modal-footer" style="padding:12px 20px 18px;display:flex;justify-content:flex-end;gap:10px;">
+            <button class="fbtn" onclick="hideModal('stationRenameModal')">取消</button>
+            <button class="fbtn fbtn-primary" onclick="hideModal('stationRenameModal')">确定</button>
+        </div>
+    </div>
+</div>
+
+<!-- 车站删除弹窗 -->
+<div class="modal-overlay" id="stationDeleteModal">
+    <div class="modal" style="width:380px;">
+        <div class="modal-header"><span class="modal-title">删除确认</span><span class="modal-close" onclick="hideModal('stationDeleteModal')">×</span></div>
+        <div class="modal-body" style="padding:20px;">
+            <p style="font-size:14px;color:#444;line-height:1.7;">确定要删除 <strong id="stationDeleteTarget" style="color:#e8622a;"></strong> 吗？<br>删除后数据将无法恢复，请谨慎操作。</p>
+        </div>
+        <div class="modal-footer" style="padding:12px 20px 18px;display:flex;justify-content:flex-end;gap:10px;">
+            <button class="fbtn" onclick="hideModal('stationDeleteModal')">取消</button>
+            <button class="fbtn fbtn-primary" onclick="hideModal('stationDeleteModal')">确定删除</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
