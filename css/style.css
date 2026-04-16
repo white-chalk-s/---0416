@@ -775,6 +775,28 @@ tbody td { padding: 8px 10px; font-size: 12px; color: #444; }
 .dm-search { display: flex; }
 .dm-search-input { width: 420px; height: 36px; border: 1px solid #d9d9d9; border-right: none; border-radius: 4px 0 0 4px; padding: 0 12px; font-size: 14px; outline: none; color: #999; }
 .dm-search-btn { height: 36px; padding: 0 20px; background: #e8622a; color: #fff; border: none; border-radius: 0 4px 4px 0; font-size: 14px; cursor: pointer; }
+.dm-toggle-btn {
+    position: absolute;
+    top: 8px;
+    right: 24px;
+    z-index: 10;
+    padding: 4px 12px;
+    background: #e8622a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    height: 28px;
+    display: flex;
+    align-items: center;
+}
+.dm-toggle-btn:hover { background: #d44f1f; }
+.dm-panel.collapsed .dm-category-bar,
+.dm-panel.collapsed .dm-toolbar,
+.dm-panel.collapsed .dm-content { display: none; }
+.dm-panel.collapsed .dm-top-bar { border-bottom: none; }
+
 .dm-category-bar { background: #fff; padding: 0 24px; height: 52px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #e8e8e8; }
 .dm-cat-label { color: #666; margin-right: 4px; }
 .dm-cat-btn { height: 30px; padding: 0 16px; border-radius: 4px; border: 1px solid transparent; background: transparent; font-size: 14px; cursor: pointer; color: #333; }
