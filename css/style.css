@@ -792,11 +792,30 @@ tbody td { padding: 8px 10px; font-size: 12px; color: #444; }
     align-items: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+/* 收起时隐藏 toggle 按钮本身，使用单独的展开按钮 */
+.device-model-page:not(.collapsed) .dm-toggle-btn { display: none; }
 .dm-toggle-btn:hover { background: #d44f1f; }
-.dm-panel.collapsed .dm-category-bar,
-.dm-panel.collapsed .dm-toolbar,
-.dm-panel.collapsed .dm-content { display: none; }
-.dm-panel.collapsed .dm-top-bar { border-bottom: none; }
+.dm-expand-btn {
+    position: fixed;
+    top: 120px;
+    right: 200px;
+    z-index: 100;
+    padding: 4px 12px;
+    background: #e8622a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.device-model-page.collapsed .dm-category-bar,
+.device-model-page.collapsed .dm-toolbar,
+.device-model-page.collapsed .dm-content { display: none; }
+.device-model-page.collapsed .dm-top-bar { border-bottom: none; }
 
 .dm-category-bar { background: #fff; padding: 0 24px; height: 52px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #e8e8e8; }
 .dm-cat-label { color: #666; margin-right: 4px; }

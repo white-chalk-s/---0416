@@ -188,6 +188,9 @@
                                 <button class="dm-search-btn">搜索</button>
                             </div>
                         </div>
+                        <!-- 收起时显示的展开按钮 -->
+                        <div class="dm-expand-btn" id="dmExpandBtn" onclick="toggleDmPanel()" style="display:none;">▲ 展开</div>
+                        <!-- 展开时显示的收起按钮 -->
                         <div class="dm-toggle-btn" id="dmToggleBtn" onclick="toggleDmPanel()">▼ 收起</div>
                         <div class="dm-category-bar">
                             <span class="dm-cat-label">二级：</span>
@@ -564,13 +567,16 @@
 <script>
 function toggleDmPanel() {
     var panel = document.getElementById('deviceModelView');
-    var btn = document.getElementById('dmToggleBtn');
+    var toggleBtn = document.getElementById('dmToggleBtn');
+    var expandBtn = document.getElementById('dmExpandBtn');
     if (panel.classList.contains('collapsed')) {
         panel.classList.remove('collapsed');
-        btn.innerHTML = '▼ 收起';
+        toggleBtn.style.display = 'flex';
+        expandBtn.style.display = 'none';
     } else {
         panel.classList.add('collapsed');
-        btn.innerHTML = '▲ 展开';
+        toggleBtn.style.display = 'none';
+        expandBtn.style.display = 'flex';
     }
 }
 </script>
