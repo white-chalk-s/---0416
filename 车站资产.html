@@ -561,6 +561,19 @@
 </div>
 
 <script src="js/main.js"></script>
+<script>
+function toggleDmPanel() {
+    var panel = document.getElementById('deviceModelView');
+    var btn = document.getElementById('dmToggleBtn');
+    if (panel.classList.contains('collapsed')) {
+        panel.classList.remove('collapsed');
+        btn.innerHTML = '▼ 收起';
+    } else {
+        panel.classList.add('collapsed');
+        btn.innerHTML = '▲ 展开';
+    }
+}
+</script>
 
 </body>
 </html>
